@@ -1,0 +1,45 @@
+---
+title: "Power_analysis_COVID_EMA"
+author: "Simon van Baal"
+date: "08/03/2021"
+output: html_document
+---
+
+```{r setup}
+library(simr)
+library(tidyverse)
+library(ids)
+
+```
+
+
+```{r create dataset}
+EffectSize = .05
+
+set.seed(123)
+simData <- 
+  tibble(Participant = rep(adjective_animal(n = 99), each = 4*7),
+         Condition = rep(rep(c("EFT", "Empathy", "Control"), each = 33), each = 4*7),
+         Chance = ifelse(Condition == "EFT", .7+EffectSize, 
+                         ifelse(Condition == "Empathy", .7+EffectSize, .7)),
+         ControlUrge = rbinom(99*21, 1, Chance))
+
+model1 <- lmer(ControlUrge ~ Condition + (1|Participant), data = simData)
+summary(model1)
+
+set.seed(123)
+simulationResult <- powerSim(model1)
+
+a <- powerCurve(model1, along = "Participant")
+plot(a)
+
+```
+
+
+
+
+
+
+
+
+

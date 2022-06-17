@@ -1,0 +1,277 @@
+---
+title: "COVID EMA 2021 Analysis"
+author: "Simon van Baal"
+date: "08/04/2021"
+output: html_document
+---
+
+```{r setup, warning=FALSE}
+library(tidyverse)
+library(afex)
+library(ordinal)
+library(emmeans)
+library(ggplot2)
+library(sjPlot)
+theme_set(theme_light())
+
+# Possible to directly run > load(".RData")
+
+```
+
+```{r load data, message=FALSE}
+nonScaledData <- 
+  read_csv("./data/clean-data_eft-compassion.csv")
+```
+
+```{r Descriptives}
+# Preparing the data for analysis - zero-centering variables, 
+# setting reference levels etc.
+Data <-
+  nonScaledData %>%
+  filter(!is.na(urgeMagnitude)) %>%
+  mutate(
+    dayOfMonth = factor(dayOfMonth),
+    typeOfUrge = factor(typeOfUrge),
+    Sex = factor(Sex),
+    VaccineHesitancy = scale(VaccineHesitancy, center = T, scale = F),
+    VaccineEffectivenessJ = scale(VaccineEffectivenessJ, T, F),
+    PredictionIndex = scale(PredictionIndex, T, F),
+    hour = scale(hour, T, F),
+    Age = scale(Age, T, F),
+    Resistance = factor(ifelse(
+      RESIST == 1, "Yes",
+      ifelse(RESIST == 0, "No", NA)
+    )),
+    MIS = scale(MIS, T, F),
+    Condition = relevel(factor(Condition), ref = "Control"),
+    ParticipantID = factor(ParticipantID)
+  )
+
+# Add column that treats urgeMagnitude as factor for ordinal analysis
+ordinalData <- 
+  Data %>%
+  mutate(fctrUrgeMagnitude = factor(urgeMagnitude))
+
+```
+
+
+
+```{r Analysis for urge intensity}
+
+# Estimate models, this could take a while.
+ClmmUrgeStrength <-
+  clmm(fctrUrgeMagnitude ~
+          Condition*
+          typeOfUrge +
+          dayOfMonth +
+          hour +
+          MIS +
+         Sex +
+         Age +
+          (1|ParticipantID),
+       link = "logit",
+        data = ordinalData)
+
+# Omit interaction
+ClmmNoInteractionUrgeStrength <-
+  clmm(fctrUrgeMagnitude ~
+          Condition +
+          typeOfUrge +
+          dayOfMonth +
+          hour +
+          MIS +
+         Sex +
+         Age +
+          (1|ParticipantID),
+        data = ordinalData)
+
+# remove effects to do likelihood ratio tests
+ClmmNoDaysUrgeStrength <-
+  clmm(fctrUrgeMagnitude ~
+          Condition *
+          typeOfUrge +
+          hour +
+          MIS +
+         Sex +
+         Age +
+          (1|ParticipantID),
+        data = ordinalData)
+
+# rank deficient, so model can't be tested against full model
+ClmmNoConditionUrgeStrength <-
+  clmm(fctrUrgeMagnitude ~
+          Condition:typeOfUrge +
+          dayOfMonth +
+          hour +
+          MIS +
+         Sex +
+         Age +
+          (1|ParticipantID),
+        data = ordinalData)
+
+ClmmNoTypeUrgeStrength <-
+  clmm(fctrUrgeMagnitude ~
+          Condition +
+          dayOfMonth +
+          hour +
+          MIS +
+         Sex + 
+         Age +
+          (1|ParticipantID),
+        data = ordinalData)
+
+anova(ClmmUrgeStrength, 
+      ClmmNoInteractionUrgeStrength, 
+      ClmmNoConditionUrgeStrength)
+
+anova(ClmmUrgeStrength, 
+      ClmmNoInteractionUrgeStrength, 
+      ClmmNoTypeUrgeStrength)
+
+```
+
+
+```{r comparing factor levels}
+# Here we compare factor levels using the emmeans package.
+
+emm_options(pbkrtest.limit = 20000)
+
+emmStrengthCondition <-
+  emmeans(ClmmUrgeStrength, ~ Condition,
+          mode = "latent")
+pairsStrengthCondition <-
+  pairs(emmStrengthCondition, 
+        adjust = 'fdr', 
+        reverse = T)
+confint(pairsStrengthCondition)
+
+emmStrengthType <-
+  emmeans(ClmmUrgeStrength, ~ typeOfUrge)
+
+emmStrengthConditionType <-
+  emmeans(ClmmUrgeStrength, ~ Condition | typeOfUrge, 
+          adjust = "fdr",
+          mode = "latent")
+pairsStrengthConditionType <-
+  pairs(emmStrengthConditionType,
+        adjust = "fdr",
+        reverse = T)
+#confint(emmStrengthConditionType)
+
+emmStrengthDay <-
+  emmeans(ClmmUrgeStrength, ~ dayOfMonth)
+#pairs(emmStrengthDay, adjust = 'fdr')
+#confint(emmStrengthDay)
+
+# MIS CIs
+MisCiLowerUrge = .3625 - 1.96 * .07915
+MisCiUpperUrge = .3625 + 1.96 * .07915
+
+
+``` 
+
+
+```{r Analysis for controlling urges}
+dataControlAnalysis <-
+  Data %>%
+  filter(!is.na(CONTROL)) %>%
+  mutate(VaccineHesitancy = scale(VaccineHesitancy, center = T, scale = F),
+         VaccineEffectivenessJ = scale(VaccineEffectivenessJ, T, F),
+         PredictionIndex = scale(PredictionIndex, T, F),
+         hour = scale(hour, T, F),
+         Resistance = factor(ifelse(RESIST == 1, "Yes",
+                                    ifelse(RESIST == 0, "No", NA))),
+         MIS = scale(MIS, T, F),
+         Condition = relevel(factor(Condition), ref = "Control"),
+         urgeMagnitude = scale(urgeMagnitude, T, F))
+
+glmmControl <-
+  mixed(CONTROL ~
+          Condition*
+          typeOfUrge +
+          VaccineHesitancy +
+          VaccineEffectivenessJ +
+          PredictionIndex +
+          dayOfMonth +
+          hour +
+          urgeMagnitude +
+          Resistance +
+          MIS +
+          (1|ParticipantID),
+        family = "binomial",
+        method = "LRT",
+        data = dataControlAnalysis)
+nice(glmmControl)
+
+# MIS Cis
+ControlMisCiLower = -0.045100 - 1.96*0.126714
+ControlMisCiUpper = -0.045100 + 1.96*0.126714
+
+hesitancyControlCiLower = -.09811 - 1.96 * .08362
+hesitancyControlCiUpper = -.09811 + 1.96 * .08362
+
+effectivenessControlCiLower = .00791 - 1.96 * .11277
+effectivenessControlCiUpper = .00791 + 1.96 * .11277
+
+predictionControlCiLower = -.12111 - 1.96 * .30834 
+predictionControlCiUpper = -.12111 + 1.96 * .30834 
+
+```
+
+```{r emmeans controlling of urges}
+
+emmControlCondition <-
+  emmeans(glmmControl, ~Condition, 
+          adjust = 'fdr')
+pairsControlCondition <-
+  pairs(emmControlCondition)
+confint(pairsControlCondition)
+
+emmControlTypeOfUrge <-
+  emmeans(glmmControl, ~typeOfUrge, type = 'response')
+pairs(emmControlTypeOfUrge, adjust = 'fdr')
+confint(emmControlTypeOfUrge)
+
+
+emmControlTypeOfUrgeCondition <-
+  emmeans(glmmControl, 
+          ~Condition|typeOfUrge, 
+          type = 'response')
+pairsControlTypeOfUrgeCondition <- 
+  pairs(emmControlTypeOfUrgeCondition, 
+        adjust = 'fdr')
+confint(pairsControlTypeOfUrgeCondition)
+
+```
+
+
+```{r Analysis for resisting urges}
+# Testing whether impulsivity affected attempts to resist an urge.
+
+glmmResist <-
+  mixed(RESIST ~
+          Condition*
+          typeOfUrge +
+          dayOfMonth +
+          hour +
+          urgeMagnitude +
+          MIS +
+          (1|ParticipantID),
+        family = "binomial",
+        method = "LRT",
+        data = Data)
+summary(glmmResist)
+
+# Mis Cis
+ResistMisCiLower = -0.10275 - 1.96 * 0.11072
+ResistMisCiUpper = -0.10275 + 1.96 * 0.11072
+
+
+```
+
+
+
+
+
+
+

@@ -1,0 +1,181 @@
+Country,Vulnerable,vaccineAvailable,vaccineGP,vaccineEffectiveness,vaccineNormal,predictionWork,predictionHoliday,predictionNormal,ProlificID
+England,No,10,10,8,9,6,12,12,5ae9f13b9b283d00017ee04d
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,9,4,9,12,5ce3e2bc22fe790001326e1d
+England,No,9,9,7,8,12,9,18,5edad9bc3e927a18f722474d
+England,No,8,10,9,8,18,24,36,5eb3d22ffa15221c2e0117c5
+England,"Yes, I am in a vulnerable group",10,10,9,10,12,24,36,5fa148d79727b2208ca408b4
+England,"Yes, one of my family members is in a vulnerable group",10,10,7,8,6,12,21,5ba49f43840c47000160f138
+Scotland,No,10,10,8,7,12,12,24,602d888e3b8daf7e896ab166
+England,"Yes, one of my family members is in a vulnerable group",9,9,7,7,2,12,24,5b3533616d601d0001d65110
+England,No,10,10,8,9,12,12,24,5f2ece203d736d27675d9496
+England,No,10,10,6,9,5,12,18,603d345a41a4ccb7e126dcd1
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,9,18,6,18,5e8d24047fba8f0ed42975b5
+Scotland,No,10,10,1,8,12,24,48,5f5bdef433291039ca812397
+England,No,10,10,8,9,6,4,9,603bc4615efcd8834c3c0450
+England,"Yes, I am in a vulnerable group",10,10,9,8,6,9,18,5ffc7d3bf2906c0ad8bcf9b4
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,9,12,6,24,5e809c3515980f776e56a493
+England,"Yes, one of my family members is in a vulnerable group",10,10,10,10,9,6,12,5f0c92274d299e0e5f26e40a
+England,No,10,10,4,3,12,24,60,5f61f7f59df6ca1bfe6a8a89
+England,No,5,3,7,6,12,24,18,5f7ee2af49f7a51d751d7d98
+England,No,10,10,10,8,6,6,12,5ff2cdea0b03abfc9ae58ab2
+England,"Yes, I am in a vulnerable group",10,10,10,10,12,12,36,5ea00a03e32996000ac2da80
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,8,12,24,48,5e1aeccbd32f9332c931651e
+England,No,9,9,7,8,8,12,12,5eac39578621a7067ae955eb
+England,No,10,10,7,8,4,9,9,5e58b75cc713f80bf5605d34
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,8,4,12,12,5e662ebd5c28e1000c543cab
+England,No,10,10,7,7,NA,12,60,5aea2b3b1246ce000110d2fd
+England,No,10,10,9,10,3,6,18,5e6fc1d5d6d43357de8e6edc
+England,No,10,10,8,8,6,12,24,5fef2e26520dd124f6240e0f
+England,No,10,10,8,9,12,6,12,5c69be6ac3aaf50001c69311
+England,"Yes, I am in a vulnerable group,Yes, one of my family members is in a vulnerable group",10,10,9,9,4,6,12,5e9dafe6b8a8f30c1215523f
+England,"Yes, one of my family members is in a vulnerable group",8,9,7,8,24,6,24,5f0dbbac1296d504be69f37e
+Scotland,No,10,10,10,9,3,6,24,5ecbe220d068807a5425c4de
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,10,12,6,36,5fc74b5900f0a5079e03dbae
+England,No,10,10,10,10,6,18,9,59e5244aac0af70001b36803
+England,No,10,10,8,7,12,12,18,5c67fec9b083920001981572
+England,No,10,10,8,10,12,24,60,5e977f778ffa480f96f70d64
+Scotland,"Yes, one of my family members is in a vulnerable group",10,10,10,10,18,12,24,5ea6eba9aba41b078b6a832f
+Scotland,No,10,10,8,9,9,12,12,5ea968bb6b63e005e4101007
+England,No,10,10,7,9,12,5,36,6036746ca98e1e3aafa30569
+England,"Yes, one of my family members is in a vulnerable group",10,10,5,8,6,12,24,5a7a0d8df49c9a0001f31b73
+England,No,10,10,7,8,6,12,36,5c7da4066babcb000185028b
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,10,24,18,24,5dbf09120f73cf3b21b5711c
+England,"Yes, one of my family members is in a vulnerable group",10,5,6,8,6,6,10,5977461fc0e7140001ed3d18
+England,No,1,1,2,4,6,12,12,5ea9a852575f8c0d9cd814d2
+England,No,10,10,8,10,12,9,24,5efca11992bb0d06c28f4bd3
+England,No,10,10,9,10,6,4,12,5dcfe056e2dcbd0e4508e76a
+England,No,10,10,10,10,3,6,9,5ea54cbbe863495282ba90c7
+England,"Yes, one of my family members is in a vulnerable group",10,10,10,9,12,3,24,5ca37f9d706253001284fde7
+Scotland,No,10,10,8,10,3,2,12,5c48c3f337437600013383d5
+Northern Ireland,No,10,10,9,9,6,6,12,5ed5554c81c8660c613057d4
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,8,6,6,12,5d6950e2541fce00185bac27
+England,No,10,10,9,10,6,6,12,5f1d5591fe7ca36560aa455a
+England,"Yes, one of my family members is in a vulnerable group",5,5,7,10,8,8,12,5f01c985f119a1317aa68d30
+England,No,9,10,9,10,10,12,10,5ff34b6e7b84d341af84d1a3
+England,No,8,9,7,7,10.5,6,12,603abdcfe62ae172b5689bc4
+England,No,10,10,9,9,18,6,36,5ee68764ac22810cd0fa60fc
+England,No,10,10,8,8,24,6,30,603f82cb2fafec01e1d6470a
+England,"Yes, one of my family members is in a vulnerable group",3,3,3,3,12,12,18,5f280566aa663b081c501838
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,10,24,6,36,5cf58c09370a0800017d209d
+England,No,10,10,8,10,6,12,30,5afd421f7d6f3a000197443b
+Wales,No,10,10,9,9,6,9,9,5f091bb928d2f41aa5ed3137
+England,No,10,10,9,10,12,6,12,5c40a396e7458000018b7e52
+England,No,10,10,10,9,6,5,18,5f2c5650d1981f10befda956
+Scotland,"Yes, one of my family members is in a vulnerable group",10,10,9,9,10,8,15,5ff30c796079e17eb74d5f2f
+Northern Ireland,"Yes, one of my family members is in a vulnerable group",10,10,8,10,6,4,12,59650d715708720001ab0909
+England,No,10,10,8,9,10,24,60,5ebb21fd8f5bae0e6035986a
+England,"Yes, I am in a vulnerable group",10,10,8,8,6,12,24,5ea2db31f5c6d720f25f0697
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,6,6,12,60,5f50010b09e969152f9a05ae
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,8,12,18,48,5df152a654e2f006cac9ef82
+England,No,3,3,3,5,6,12,12,5f96a447b7b732000a774200
+England,No,10,10,7,8,10,12,24,5f186e65e1164802550f62f6
+England,"Yes, I am in a vulnerable group",10,10,9,10,3,12,12,5fbe39bf0d0ce90a7eb0c791
+England,No,10,10,10,10,4,12,12,60148ce8ea15974d855c06d5
+England,No,10,10,7,8,15,5,15,5d723d5f5bf0060017a03dc6
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,9,21,6,30,5dacb2d886e5be00144cc7b1
+England,"Yes, I am in a vulnerable group",3,3,1,3,18,24,36,5ccb4c09e9c5b40016f6b05e
+Wales,No,0,0,2,7,6,8,14,5f2eb1d21cdf492436120f62
+England,No,10,10,9,10,6,6,12,5ba33d995196c600014853b6
+England,"Yes, I am in a vulnerable group",9,9,8,8,3,4,12,5ffb3e2fb301961613c341cd
+England,No,10,10,10,10,6,6,9,5dc315da0016bb2282e4243b
+England,No,1,1,8,8,6,6,12,5ea2c1119a49751e74bb17c5
+England,No,10,10,8,9,9,6,9,5c4cdcb14cb4630001ec4955
+England,"Yes, one of my family members is in a vulnerable group",7,3,7,10,12,6,18,6018390a0fa3e405d949dc58
+England,No,10,10,9,9,6,15,24,5ef270a4fd9c460d67b45722
+England,"Yes, one of my family members is in a vulnerable group",6,6,3,2,12,6,18,5c42f9388bb6fd000163d1b4
+England,No,10,10,8,10,6,12,12,5fb8d29daff3bb26b233b979
+England,No,10,10,8,9,9,12,18,5e7737423115e0296b5e582c
+England,"Yes, I am in a vulnerable group",10,10,10,8,12,12,18,6017dfba38874fa7d81dcf7f
+England,"Yes, I am in a vulnerable group",10,10,10,9,18,12,60,5ed115faa41e260201dbac41
+England,"Yes, I am in a vulnerable group",10,10,8,8,24,12,36,5c9034a2eedbd9001573ca14
+England,No,10,10,9,9,18,12,30,5dd2637ec925a8278ae9a871
+England,"Yes, one of my family members is in a vulnerable group",9,9,7,10,12,24,24,5f72adea4576d21f8ac889a0
+England,No,10,10,9,8,18,24,36,5accf2c4fa3b4e000173d11e
+England,No,10,10,10,10,6,9,12,55a95802fdf99b7cc6154d34
+Scotland,No,10,10,10,10,24,12,24,5e846afa8d79ef000cd5911f
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,10,4,12,12,5fb46dd5d9ece50422838e7a
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,10,8,12,24,5f8c5c029a3e4107baa59dad
+England,"Yes, one of my family members is in a vulnerable group",9,9,7,8,5,9,12,5f57be602095072bb238a7ab
+England,"Yes, one of my family members is in a vulnerable group",5,5,8,8,12,12,12,5f5bc82af18ff215e29a59f8
+England,No,8,9,9,9,5,6.5,10,5e78a2594414f942069d1c07
+England,No,10,10,8,8,6,6,12,5dbddb248fd62530bcd3cb21
+England,"Yes, one of my family members is in a vulnerable group",9,10,8,9,12,18,24,5e77c76ddec45632bb889d42
+England,No,10,10,9,9,8,12,12,5eaaaf42430942000a234b16
+England,"Yes, one of my family members is in a vulnerable group",5,7,9,10,15,9,36,5f481dd8243bb32b362385b1
+England,No,10,10,8,9,24,18,24,5fc6917c11783d127e01e8fc
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,8,5,4,12,5ff8479151c2ff5b89656485
+Scotland,No,9,9,8,8,24,6,24,5ea988e004c8da098aee3c9a
+England,No,10,10,8,9,6,8,18,5dd9347ce2dcbd8b0dcb1c7f
+England,No,9,10,8,8,4,6,12,5c13d54cce422b0001d6f05c
+England,"Yes, I am in a vulnerable group,Yes, one of my family members is in a vulnerable group",10,10,8,7,6,12,12,5e972197940ea01ca27d9573
+England,No,10,10,8,9,8,6,12,5e2f3b507c9366000c10a2d2
+England,No,10,10,9,10,12,8,36,5f588951caf0033fc77e0d30
+England,"Yes, I am in a vulnerable group,Yes, one of my family members is in a vulnerable group",10,10,1,10,3,6,6,5fcb6bcf67625987f48f9a27
+England,"Yes, one of my family members is in a vulnerable group",6,6,3,1,12,24,24,5a0262035d06850001aff235
+England,No,10,10,10,10,24,12,24,593ffac653430500016442b2
+England,No,10,7,7,7,12,24,120,5d6d94cb05e6930001a1464d
+England,"Yes, one of my family members is in a vulnerable group",10,8,9,9,4,15,15,5f68df4d0b4ea806d2d0f66d
+England,Prefer not to say,10,10,10,10,12,6,18,5e3158990da2f214583fed0a
+England,No,10,10,9,10,6,5,12,5f5896b499fe9900080e643b
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,10,12,12,12,5c18bbe50d57c30001b3f3ca
+Scotland,No,10,10,8,10,6,4,9,5c1c792d4bbe4f00012cd885
+England,No,10,10,8,8,2,12,12,5d91e0146f9bc6001923f678
+England,No,10,10,7,10,6,12,24,5eca46c6c1e2c601290bab15
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,10,1.5,6,12,5ed519d5f242dd06a51883e7
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,8,12,6,12,5f0f67e2e8fe0212b6992c3a
+England,"Yes, one of my family members is in a vulnerable group",10,10,10,10,12,9,24,5d6a924a9e02d2001514311a
+Wales,"Yes, I am in a vulnerable group,Yes, one of my family members is in a vulnerable group",10,10,9,9,6,3,12,5fa56c6dd402cb02c1359853
+England,No,1,1,6,6,3,12,60,5eaa28410072171a60b97514
+England,No,10,10,7,6,6,4,12.5,5f589f71eb77cc0110390be1
+England,No,10,10,9,9,12,12,12,5f8b1c5bc2915d20df86eaea
+England,"Yes, I am in a vulnerable group",8,8,6,7,6,12,36,5d9b02cd4ce5d302eb84801d
+England,No,10,10,9,9,6,4,12,5d096a7ce13d9f000112da6e
+England,No,10,10,7,9,8,12,18,5f75f7a73bf0b60009f88e38
+England,No,10,10,9,8,6,7.5,12,5ee131f793ab7b12e4b525fb
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,10,6,15,15,5e98acb04bbc220bbba37b50
+England,No,10,10,10,10,8,12,18,602d5bed8cd1f176744c4ee4
+England,No,10,10,8,9,NA,NA,NA,6009814b7e7ae8404658d4c7
+England,"Yes, one of my family members is in a vulnerable group",9,7,9,9,6,12,12,587e7be80cfbeb0001a62ae4
+England,No,10,10,7,5,24,24,24,5dcddf9f4d51e40a5292727d
+Scotland,No,10,10,10,10,24,60,60,5efb5a98f9e6540aaef3dd55
+England,No,10,10,9,9,3,10.5,12,5ecd952954762d112e95db08
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,10,6,12,18,586d6b28de1cea0001f7a125
+England,No,10,10,7,8,24,24,12,5a8d59b2ae9a0b0001aa30b3
+Wales,"Yes, one of my family members is in a vulnerable group",10,10,8,8,10,8,18,5f69ec9b9dba42000a8b7bb5
+England,No,7,7,7,7,6,12,3,5f305c9cf7fabe4adaf0de5d
+England,No,10,10,7,9,3,12,24,5ed2c233dddac00c412585f6
+England,No,10,10,8,10,6,6,12,5e5f83ca62ff462b740ac6eb
+England,No,4,4,9,10,12,12,9,5cbdf7e839447e00017459f3
+Scotland,"Yes, one of my family members is in a vulnerable group",10,10,8,9,12,10,60,5aec1707c09cd900015d7408
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,7,6,12,60,5f8ee210e1058d099ca56c7b
+England,"Yes, I am in a vulnerable group",10,10,8,7,12,6,6,5c40716bbc9c0c00014eae2d
+England,No,10,10,9,9,12,6,18,5d628bb8d293be0017808bf6
+England,No,10,10,9,10,3,4,6,5fb242a8b0c0e17bad2840f4
+England,No,10,10,10,10,6,12,18,5fc8b1548f68832578cb0ee9
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,10,6,12,18,5f3a9a262fd4896cfdf870a8
+Wales,"Yes, I am in a vulnerable group",10,10,8,8,3.5,6,12,5c486bcb8e527100017f8bb3
+England,No,10,10,8,10,12,12,24,5f6dc0b520717c249891fa0c
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,9,9,6,12,5dcbfe7e88381e88af45d210
+England,No,10,10,10,10,12,12,24,5f0f2b3c68d4a5081cad2ed2
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,10,6,4,7.5,5fa2a232f1845e4a360e75ab
+England,"Yes, one of my family members is in a vulnerable group",10,10,7,7,7,8,10,5f983616975cbe0b58f7c17b
+Wales,"Yes, one of my family members is in a vulnerable group",8,8,5,2,24,24,48,575981fb6200e3000656bcc2
+England,"Yes, I am in a vulnerable group",10,10,10,10,6,6,24,5ea04f91e044e106a914fbd6
+England,No,10,10,8,9,12,12,36,5cf67205237c8a00196833f4
+England,No,10,10,9,9,12,16,16,5ea713ed7dd03d0c54bee030
+England,No,10,10,8,10,6,12,18,5eda1c91460b765ded2a52d5
+England,No,8,9,9,8,4,9,24,54876fe7fdf99b03efa64374
+Wales,No,10,10,10,10,12,18,24,5eff6492814d8101d8ca4bcc
+Wales,No,10,10,7,7,12,18,24,5c7cf4e3ac90ae000144c9b9
+England,"Yes, I am in a vulnerable group",6,8,7,9,6,12,12,5e4d14e7b0696715d4318196
+England,No,10,10,9,9,6,4,12,5ef0ff8017f678488a2e62b2
+England,"Yes, one of my family members is in a vulnerable group",10,10,8,7,12,18,30,5a9c5d1189de8200013f140a
+Scotland,No,10,10,9,9,6,4,12,5ea031f7e044e104a205f65b
+England,No,10,10,9,9,7,7,12,5c1191c4ceb78d0001c0e3ee
+England,No,10,10,8,10,12,12,12,5df1117111d87901da0dbc3c
+England,No,10,10,7,9,12,6,24,5b953df0dd875100014c6e8e
+England,No,6,6,6,5,6,3,12,6022a97ef5007d0167fc1cc1
+England,"Yes, one of my family members is in a vulnerable group",10,10,9,9,24,60,60,5fc572966b2af00cce48cad1
+England,Prefer not to say,10,10,8,8,24,24,24,558ef471fdf99b3a5619b8a9
+England,No,8,8,8,6,6,12,24,603ffcb856d9a81901de5375
+Scotland,No,10,10,9,10,20,24,48,5ca3adc28618ca001742161b

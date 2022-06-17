@@ -1,0 +1,193 @@
+---
+title: "EMA_COVID2021_Cleaning"
+author: "Simon van Baal"
+date: "05/04/2021"
+output: html_document
+---
+
+If not using the RData file, run the files in the following sequence:
+cleaning, analysis, descriptive-stats, plots.
+
+```{r libraries, warning=FALSE}
+library(lubridate)
+library(ggplot2)
+library(tidyverse)
+theme_set(theme_light())
+#renv::init()
+
+```
+
+```{r load data, message = FALSE}
+
+Eligibility <- read_csv('./raw-data/EligibilityCOVID2021.csv')
+Survey_Data <- read_csv('./raw-data/SurveyDataCOVID2021.csv')
+SEMA_Data <- read_csv('./raw-data/SemaDataCOVID2021.csv')
+
+```
+
+
+```{r Cleaning}
+# Linking survey-based datasets
+ParticipantInfo <-
+  left_join(Eligibility, Survey_Data) %>%
+  mutate(ParticipantID = factor(ParticipantID))
+
+# Merge data sets, create indices for predictions, 
+# vaccine hesitancy and vaccine efficacy judgments.
+SEMA_Data <- 
+  SEMA_Data %>% 
+  mutate(ParticipantID = factor(PARTICIPANT_ID)) %>% 
+  left_join(ParticipantInfo) %>%
+  mutate(PredictionIndex = log((predictionHoliday+predictionNormal+predictionWork)/3),
+         VaccineHesitancy = 10-(vaccineGP+vaccineAvailable)/2,
+         VaccineEffectivenessJ = (vaccineNormal + vaccineEffectiveness)/2) %>% 
+  # then select relevant columns
+  select(ParticipantID, Condition, Age,
+         Sex, Ethnicity, Country, Vulnerable,
+         Vaccination, CovidDiagnosis,
+         PredictionIndex, VaccineHesitancy,
+         VaccineEffectivenessJ,
+         TRIGGER, STUDY_VERSION, SURVEY_NAME,
+         STARTED_TS, SCHEDULED_TS, ASTHMA_EMPATHY_RT,
+         HOSPITAL_EMPATHY_RT, ELDERLY_EMPATHY_RT,
+         HEALTHCAREWOKER_EMPATHY_RT, BEACH_EFT_RT,
+         HOLIDAY_EFT_RT, TRAVEL_EFT_RT, FAVOURITEACTIVITY_EFT_RT,
+         SOMETHINGYOULOVE_EFT_RT, NEWS1_CONTROL_RT,
+         NEWS2_CONTROL_RT, NEWS3_CONTROL_RT,
+         NEWS4_CONTROL_RT, NEWS5_CONTROL_RT,
+         NEWS6_CONTROL_RT, NEWS7_CONTROL_RT,
+         VIVIDNESS_EMPATHY, VIVIDNESS_EFT,
+         WASH_URGE,
+         COVER_URGE, LOGIN_URGE,
+         LEAVEHOUSE_URGE, SOCIALDISTANCE_URGE,
+         TEST_URGE, TOUCH_URGE, WASH_RESIST,
+         COVER_RESIST, LOGIN_RESIST,
+         LEAVEHOUSE_RESIST, SOCIALDISTANCE_RESIST,
+         TEST_RESIST, TOUCH_RESIST, WASH_CONTROL,
+         COVER_CONTROL, LOGIN_CONTROL,
+         LEAVEHOUSE_CONTROL, SOCIALDISTANCE_CONTROL,
+         TEST_CONTROL, TOUCH_CONTROL,
+         SPENTMORE, FELTIMPATIENT,
+         SPUROFMOMENT, SAIDWITHOUTTHINK
+         ) %>%
+  rename(HEALTHCAREWORKER_EMPATHY_RT = HEALTHCAREWOKER_EMPATHY_RT) %>%
+  arrange(ParticipantID, STARTED_TS)
+
+# Putting dates in there. 
+SEMA_Data <-
+  SEMA_Data %>%
+  mutate(
+    DateTimeScheduled = dmy_hm(SCHEDULED_TS) - hours(10),
+    DateTimeStarted = dmy_hm(STARTED_TS) - hours(10),
+    dayOfMonth = ifelse(
+      !is.na(DateTimeScheduled),
+      day(DateTimeScheduled),
+      day(DateTimeStarted)
+    ),
+    weekDay = factor(
+      wday(DateTimeStarted, label = TRUE, abbr = T),
+      levels = c('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')
+    ),
+    hour = ifelse(
+      !is.na(DateTimeScheduled),
+      hour(DateTimeScheduled),
+      hour(DateTimeStarted)
+    )
+  ) %>%
+  mutate_at(vars(ASTHMA_EMPATHY_RT:SAIDWITHOUTTHINK), function(x)
+    ifelse(x == '<no-response>' | x == '<not-shown>', NA, x)) %>%
+  mutate_at(vars(ASTHMA_EMPATHY_RT:SAIDWITHOUTTHINK), function(x)
+    as.numeric(x))
+
+# Creating an aggregate score for the Tomko et al. Momentary Impulsivity Scale
+SEMA_Data <- 
+  SEMA_Data %>%
+  mutate(MIS = (SAIDWITHOUTTHINK + 
+                  SPENTMORE + 
+                  FELTIMPATIENT + 
+                  SPUROFMOMENT)/4) %>%
+  rename_at(vars(contains('EMPATHY')), ~sub('EMPATHY', 'COMPASSION', .x))
+
+
+```
+
+```{r Long data}
+
+LongData <- 
+  SEMA_Data %>%
+  pivot_longer(cols = WASH_URGE:TOUCH_CONTROL,
+               names_to = c("typeOfUrge", ".value"),
+               names_sep = "_",
+               values_to = "urgeStrength") %>%
+  mutate(controlText = factor(ifelse(CONTROL == 1, "Urge successfully controlled", 
+                                     "Urge Not successfully controlled")),
+         urgeBinary = factor(ifelse(URGE > 0, 1, 0)),
+         urgeMagnitude = factor(ifelse(URGE> 0, URGE, NA)))
+
+# We check whether the treatment was administered that morning.
+MorningSurveyCheck <- 
+  SEMA_Data %>%
+  filter(SURVEY_NAME %in% 
+           c("Morning survey #1", 
+             "Morning survey #2", 
+             "Morning survey #3")) %>%
+  group_by(ParticipantID, dayOfMonth) %>%
+  mutate(Administered = ifelse(!is.na(STARTED_TS), 
+                               "Yes", 
+                               "No"),
+         Vividness = ifelse(!is.na(VIVIDNESS_EFT), 
+                            VIVIDNESS_EFT,
+                            ifelse(!is.na(VIVIDNESS_COMPASSION), 
+                                   VIVIDNESS_COMPASSION, 
+                                   NA))) %>%
+  dplyr::select(Administered, 
+                Vividness, 
+                ParticipantID, 
+                dayOfMonth)
+
+# Exclude participants who completed less than 50% of surveys.
+IncludedParticipants <-
+  SEMA_Data %>%
+  filter(TRIGGER == "scheduled",
+         !is.na(STARTED_TS),
+         !(dayOfMonth == 29 & hour <= 16),
+         !(dayOfMonth %in% c(15, 23, 28))) %>%
+  group_by(ParticipantID) %>%
+  summarise(Completed = n()) %>%
+  filter(Completed > 21)
+
+# Now we filter out the rows without usable data.
+AnalysisData <-
+  LongData %>%
+  right_join(IncludedParticipants) %>%
+  filter(SURVEY_NAME == "Main survey",
+         TRIGGER == "scheduled",
+         !is.na(URGE),
+         !(dayOfMonth == 29 & hour <= 16),
+         !(dayOfMonth %in% c(15,23,28))) %>%
+  mutate(dayOfMonth = ifelse(hour < 17 & dayOfMonth != 1, dayOfMonth-1,
+                             ifelse(hour < 17 & dayOfMonth == 1, 31, dayOfMonth)),
+         hour = hour - 10, # Time difference corrections
+         ParticipantID = droplevels(ParticipantID),
+         urgeMagnitude = as.numeric(urgeMagnitude),
+         dayOfMonth = factor(dayOfMonth)) 
+
+```
+
+
+```{r}
+
+write_csv(AnalysisData, './data/clean-data_eft-compassion.csv')
+rm(Eligibility, 
+   SEMA_Data, 
+   Survey_Data, 
+   AnalysisData,
+   IncludedParticipants,
+   LongData,
+   MorningSurveyCheck,
+   ParticipantInfo)
+```
+                 
+
+
+

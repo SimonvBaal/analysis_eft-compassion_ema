@@ -1,0 +1,241 @@
+---
+title: "Plots for EFT and Compassion non-compliance urges"
+author: "Simon van Baal"
+date: "19/11/2021"
+output: html_document
+---
+
+```{r setup}
+library(ggplot2)
+library(effects)
+library(afex)
+library(ggpubr)
+
+```
+
+```{r Urge intensity by condition plot}
+
+emmForConditionPlot <-
+  emmeans(ClmmUrgeStrength, ~ Condition, mode = "mean.class")
+
+plotConditionStrength <-
+  plot(emmForConditionPlot, comparisons = T, CIs = T) +
+  labs(x = "Urge Intensity")
+plotConditionStrength 
+ggsave("plot_group-urge-intensity.tiff", 
+       height = 4,
+       width = 6)
+
+
+```
+
+
+```{r MIS plot}
+
+predictOrdinalData <-
+  nonScaledData %>%
+  filter(!is.na(urgeMagnitude), 
+         !is.na(MIS)) %>%
+  mutate(
+    ParticipantID = factor(ParticipantID),
+    fctrUrgeMagnitude = factor(urgeMagnitude),
+  )
+
+
+clmmMISUrgeStrength <-
+  clmm2(
+    fctrUrgeMagnitude ~
+      MIS,
+    random = ParticipantID,
+    data = predictOrdinalData,
+    Hess = TRUE
+  )
+
+predictOrdinalData <-
+  cbind(
+    predictOrdinalData,
+    pred = predict(
+      clmmMISUrgeStrength,
+      newdata = 
+        predictOrdinalData)
+    )
+
+misPlot <-
+    ggplot(
+      predictOrdinalData %>%
+        group_by(MIS, fctrUrgeMagnitude) %>%
+        summarise(pred = mean(pred), sd = sd(pred)),
+      aes(MIS, 
+          pred, 
+          group = pred)
+    ) +
+    geom_point() +
+  facet_wrap(~fctrUrgeMagnitude,
+             nrow = 2,
+             labeller = as_labeller(c(
+               `1` = "Urge Intensity = 1",
+               `2` = "Urge Intensity = 2",
+               `3` = "Urge Intensity = 3",
+               `4` = "Urge Intensity = 4",
+               `5` = "Urge Intensity = 5",
+               `6` = "Urge Intensity = 6",
+               `7` = "Urge Intensity = 7",
+               `8` = "Urge Intensity = 8",
+               `9` = "Urge Intensity = 9",
+               `10` = "Urge Intensity = 10"
+             ))) +
+  labs(x = "Momentary Impulsivity Scale", 
+       y = "Fitted Probability") 
+
+ggsave("misPlot.png")
+
+```
+
+
+```{r Urge intensity by day}
+# Plotting the intensity of urges per day.
+plotStrengthDay <-
+  plot(emmStrengthDay, comparisons = F,
+       CIs = T, horizontal = T)
+
+lmmUrgeStrength <- 
+  afex::mixed(urgeMagnitude ~
+          Condition*
+          typeOfUrge +
+          dayOfMonth +
+          hour +
+          MIS +
+         Sex +
+         Age +
+          (1|ParticipantID),
+        data = Data)
+
+plotDayStrength <- 
+  afex_plot(lmmUrgeStrength, "dayOfMonth", 
+          factor_levels = list(dayOfMonth = c("29" = "29 March", 
+                                              "30" = "30 March", "31" = "31 March", 
+                                              "1" = "1 April", "2" = "2 April", 
+                                              "3" = "3 April", "4" = "4 April")),
+          mapping = c("colour"),
+          error_arg = list(size = 1.2, width = 0),
+          point_arg = list(size = 2),
+          legend_title = "Date") +
+  labs(x = "Date", y = "Urge Intensity") +
+  scale_y_continuous(breaks = c(seq(1,10)),
+                     limits = c(1,10)) +
+  scale_color_viridis_d(end = .65) +
+  theme(panel.grid.minor.y = element_blank())
+ggsave("plot_day-urge-intensity.tiff", width = 7, height = 5)
+
+plotEmmStrengthType <- 
+  plot(pairs(emmStrengthType))
+ggsave("plot_urge-strength_type-of-urge.png")
+
+```
+
+
+```{r type of urge figure}
+# Plotting differences between urges in urge intensity
+
+# Create axis tick label list.
+
+labs <- c(
+        "Cover mouth",
+        "Stay home",
+        "Contact details",
+        "Social distance",
+        "Get tested",
+        "Touch face",
+        "Wash hands"
+      )
+
+
+emmPlotStrengthType <- 
+  emmeans(ClmmUrgeStrength, ~ typeOfUrge, mode = "mean.class")
+
+plotStrengthType <- 
+  plot(emmPlotStrengthType, comparisons = T) + 
+  labs(x = "Urge Intensity",
+       y = "Type of Urge") +
+  scale_y_discrete(labels = labs)
+
+
+# and in the conditional likelihood of controlling them.
+
+
+plotControlType <- 
+  plot(emmControlTypeOfUrge, comparisons = T) +
+  labs(x = "Self-Control",
+       y = "Type of Urge") +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank())
+
+ggarrange(plotStrengthType, 
+          plotControlType,
+          common.legend = T)
+ggsave("plot_type-of-urge.png", 
+       width = 9,
+       height = 5)
+
+rm(emmPlotStrengthType)
+
+```
+
+
+```{r Demographics plot}
+plotDemographics <- 
+  ggplot(
+  nonScaledData %>%
+    group_by(Sex, Age, Condition) %>%
+    summarise(n = n()) %>%
+    mutate(Condition = factor(
+      Condition, levels = c("EFT", "Compassion", "Control")
+    )),
+  aes(x = Age, y = Sex, fill = Condition)
+) +
+  geom_violin() +
+  scale_fill_viridis_d(begin = .1, end = .8) +
+  theme(legend.position = "bottom")
+
+
+```
+
+
+
+
+```{r additional material}
+## Some additional plots that may be run if interested.
+
+#plot_model(glmmControl, type = "slope", terms = "VaccineHesitancy" ,
+#           show.data = F) +
+#  labs(x = "Vaccine hesitancy score", y = "Probability of controlling an urge")
+
+
+#ControlUrgeLmerMod <-
+#  glmer(CONTROL ~
+#          Condition*
+#          typeOfUrge +
+#          VaccineHesitancy +
+#          VaccineEffectivenessJ +
+#          PredictionIndex +
+#          dayOfMonth +
+#          hour +
+#          urgeMagnitude +
+#          RESIST +
+#          MIS +
+#          (1|ParticipantID),
+#        family = "binomial",
+#        data = dataControlAnalysis)
+
+#plot(effects::predictorEffects(ControlUrgeLmerMod, "VaccineHesitancy"), 
+#     xlab = "Vaccine Hesitancy Score", 
+#     ylab = "Probability of Controlling an Urge", main = NULL,
+#     ylim = c(-2, 1.9))
+
+
+
+```
+
+
+
+

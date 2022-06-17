@@ -1,0 +1,228 @@
+---
+title: "Descriptive Statistics"
+author: "Simon van Baal"
+date: "24/11/2021"
+output: html_document
+---
+
+
+Please run this after the analysis_eft-compassion-ema.Rmd and cleaning files.
+```{r setup, include=FALSE}
+
+library(kableExtra)
+```
+
+
+```{r}
+# Some descriptives
+
+dataControlAnalysis %>% 
+  group_by(ParticipantID, typeOfUrge) %>% 
+  summarise(mean = mean(CONTROL), 
+            mUrge = mean(urgeMagnitude), 
+            nPerPart = n()) %>% 
+  group_by(typeOfUrge) %>% 
+  summarise(mControl = mean(mean), 
+            mUrge = mean(mUrge), 
+            n = n(), 
+            meanNPerPart = mean(nPerPart), 
+            sdPerPart = sd(nPerPart)) %>% 
+  arrange(typeOfUrge)
+
+
+Data %>% 
+  group_by(typeOfUrge, ParticipantID) %>% 
+  summarise(n = n()) %>% 
+  group_by(typeOfUrge) %>% 
+  summarise(n = n())
+
+Data %>% 
+  group_by(typeOfUrge, ParticipantID) %>% 
+  summarise(n = n()) %>% 
+  group_by(typeOfUrge) %>% 
+  summarise(mean = round(mean(n), 2), 
+            sd = round(sd(n), 2))
+
+Data %>% 
+  group_by(Condition, ParticipantID) %>% 
+  summarise(n = n()) %>% 
+  group_by(Condition) %>% 
+  summarise(mean = mean(n), 
+            sd = sd(n))
+
+nonScaledData %>%
+  group_by(ParticipantID, Sex) %>% 
+  summarise(Age = mean(Age),
+            mean = mean(urgeMagnitude,
+                        na.rm = T)) %>%
+  filter(!is.nan(mean)) %>%
+  group_by(Sex) %>% 
+  summarise(mAge = mean(Age),
+            sdAge = sd(Age),
+            n = n())
+
+nonScaledData %>%
+  group_by(ParticipantID, Condition, Sex) %>% 
+  summarise(Age = mean(Age),
+            mean = mean(urgeMagnitude,
+                        na.rm = T)) %>%
+  filter(!is.nan(mean)) %>%
+  group_by(Condition, Sex) %>% 
+  summarise(mAge = mean(Age),
+            sdAge = sd(Age),
+            n = n())
+
+nonScaledData %>%
+  group_by(ParticipantID, Condition, Sex, Ethnicity) %>% 
+  summarise(Age = mean(Age)) %>%
+  group_by(Condition, Sex, Ethnicity) %>%
+  summarise(mAge = mean(Age), n = n())
+
+```
+
+
+
+
+```{r Urge strength statistics}
+# Per group
+nonScaledData %>%
+  group_by(ParticipantID, Condition) %>%
+  summarise(M = mean(urgeMagnitude, na.rm = T),
+            sd = sd(urgeMagnitude, na.rm = T)) %>%
+  group_by(Condition) %>%
+  summarise(M = mean(M, na.rm = T),
+            SD = mean(sd, na.rm = T))
+
+# Urge intensity per type of urge
+nonScaledData %>%
+  group_by(ParticipantID, typeOfUrge) %>%
+  summarise(M = mean(urgeMagnitude, na.rm = T),
+            sd = sd(urgeMagnitude, na.rm = T)) %>%
+  group_by(typeOfUrge) %>%
+  summarise(M = mean(M, na.rm = T),
+            SD = mean(sd, na.rm = T))
+
+# Urge intensity per condition and type of urge 
+Data %>%
+  group_by(ParticipantID, Condition, typeOfUrge) %>%
+  summarise(M = mean(urgeMagnitude, na.rm = T),
+            sd = sd(urgeMagnitude, na.rm = T)) %>%
+  group_by(typeOfUrge, Condition) %>%
+  summarise(M = mean(M, na.rm = T),
+            SD = mean(sd, na.rm = T))
+
+
+```
+
+
+```{r Self-control statistics}
+Data %>%
+  group_by(ParticipantID, Condition) %>%
+  summarise(M = mean(CONTROL, na.rm = T),
+            pSD = (1-M)*(-M)^2 + M*(1-M)^2) %>%
+  group_by(Condition) %>%
+  summarise(M = mean(M, na.rm = T),
+            pSD = mean(pSD, na.rm = T))
+
+Data %>%
+  group_by(ParticipantID, typeOfUrge) %>%
+  summarise(M = mean(CONTROL, na.rm = T),
+            pSD = (1-M)*(-M)^2 + M*(1-M)^2) %>%
+  group_by(typeOfUrge) %>%
+  summarise(M = mean(M, na.rm = T),
+            SD = mean(pSD, na.rm = T)) %>%
+  arrange(M)
+
+Data %>%
+  group_by(ParticipantID, Condition, typeOfUrge) %>%
+  summarise(M = mean(CONTROL, na.rm = T),
+            pSD = (1-M)*(-M)^2 + M*(1-M)^2) %>%
+  group_by(typeOfUrge, Condition) %>%
+  summarise(M = mean(M, na.rm = T),
+            SD = mean(pSD, na.rm = T),
+            n = n()) %>%
+  arrange(typeOfUrge)
+
+
+```
+
+
+```{r table}
+
+tempDF <- 
+  nonScaledData %>%
+  group_by(ParticipantID, Condition, Sex) %>%
+  summarise(Age = mean(Age),
+            meanUrge = mean(urgeMagnitude,
+                        na.rm = T)) %>%
+  filter(!is.nan(meanUrge)) %>%
+  group_by(Condition, Sex) %>%
+  summarise(Mean = round(mean(Age), 2),
+            SD = round(sd(Age), 2),
+            n = n())
+
+# Create a column as denominator to create percentages M/F.
+tempColumn <- 
+  tempDF %>%
+  group_by(Condition) %>%
+  summarise(n = rep(sum(n), each = 2)) %>%
+  ungroup() %>%
+  arrange(Condition)
+
+tempDF <-
+  tempDF %>% 
+  ungroup() %>%
+  mutate(nTotal = tempColumn$n,
+         nPerc = round((n / nTotal)*100, 2))
+
+tempDF <-
+  tempDF %>% 
+  mutate(`Mean Age (SD)` = paste(tempDF$Mean, " (", tempDF$SD, ")", sep = ""),
+         N = paste(n, " (", nPerc, "%)", sep = ""))
+
+# Creating table data frames.
+tdf1 <- 
+  tempDF %>%
+  filter(Condition == "EFT") %>%
+  select(Sex, `Mean Age (SD)`, n) %>%
+  rename(` ` = Sex)
+  
+tdf2 <- 
+  tempDF %>%
+  filter(Condition == "Compassion") %>%
+  select(`Mean Age (SD)`, n)
+
+tdf3 <-
+  tempDF %>%
+  filter(Condition == "Control") %>%
+  select(`Mean Age (SD)`, n)
+
+table1 <-
+  cbind(tdf1, tdf2, tdf3) %>%
+  kable() %>%
+  kable_styling(
+    bootstrap_options = c("striped", "condensed", "hover", "responsive"),
+    full_width = F,
+    font_size = 14
+  ) %>%
+  add_header_above(c(
+    " " = 1,
+    "Future Thinking" = 2,
+    "Compassion" = 2,
+    "Control" = 2
+  ),
+  align = "justify") %>%
+  add_header_above(c(" " = 1, "Group" = 6),
+                   font_size = 18,
+                   align = "justify") 
+save_kable(table1, file = "./figures/table1_eft-compassion.html")
+
+
+rm(tdf1, tdf2, tdf3, tempDF, tempColumn)
+
+```
+
+```{r Saving workspace image}
+save.image(".RData")
+
+```
